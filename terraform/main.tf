@@ -38,7 +38,9 @@ variable "mysql_server_admin_password" {
 variable "mysql_database_name" {
     type = string
 }
-
+variable "dev_machine_ip" {
+    type = string
+}
 
 resource "azurerm_resource_group" "example" {
   name     = var.resource_group
@@ -132,8 +134,8 @@ resource "azurerm_mysql_firewall_rule" "devMachine" {
   name                = "devMachine"
   resource_group_name = azurerm_resource_group.example.name
   server_name         = azurerm_mysql_server.example.name
-  start_ip_address    = "98.203.244.154"
-  end_ip_address      = "98.203.244.154"
+  start_ip_address    = var.dev_machine_ip
+  end_ip_address      = var.dev_machine_ip
 }
 
 resource "azurerm_mysql_configuration" "example" {
@@ -149,8 +151,3 @@ resource "azurerm_mysql_configuration" "time_zone" {
   server_name         = azurerm_mysql_server.example.name
   value               = "-8:00" // Add appropriate offset based on your region.
 }
-
-
-
-/// 
-// mysql -u mysqladminun -h mysqlvjtf -P 3306 -p

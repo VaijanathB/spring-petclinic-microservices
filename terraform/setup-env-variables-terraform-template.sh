@@ -42,4 +42,6 @@ export TF_VAR_mysql_server_name=${MYSQL_SERVER_NAME} # customize this
 export TF_VAR_mysql_server_admin_name=${MYSQL_SERVER_ADMIN_NAME} # customize this
 export TF_VAR_mysql_server_admin_password=${MYSQL_SERVER_ADMIN_PASSWORD} # customize this
 export TF_VAR_mysql_database_name=${MYSQL_DATABASE_NAME}
+export TF_VAR_dev_machine_ip=123.123.123.123  # customize this
+
 
