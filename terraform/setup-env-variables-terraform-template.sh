@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==== Resource Group ====
-export SUBSCRIPTION="cba4e087-aceb-44f0-970e-65e96eff4081"  # customize this
+export SUBSCRIPTION="<Your Subscription ID>"  # customize this
 export RESOURCE_GROUP=springcloudtest2 # customize this
 export REGION=westus2
 

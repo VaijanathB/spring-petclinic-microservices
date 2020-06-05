@@ -16,7 +16,7 @@ This quickstart shows you how to deploy an existing Java Spring Cloud applicatio
 ## What will you experience
 You will:
 - Build existing Spring microservices applications
-- Provision an Azure Spring Cloud service instance
+- Provision an Azure Spring Cloud service instance using Terraform
 - Deploy applications to Azure
 - Bind applications to Azure Database for MySQL
 - Open the application
@@ -37,7 +37,7 @@ In addition, you will need the following:
 | [Maven](https://maven.apache.org/download.cgi) 
 | [MySQL CLI](https://dev.mysql.com/downloads/shell/)
 | [Git](https://git-scm.com/)
-|
+| [Terraform](https://www.terraform.io/docs/providers/azurerm/index.html)
 
 ## Install the Azure CLI extension
 
@@ -63,6 +63,10 @@ Install the Azure Spring Cloud extension for the Azure CLI using the following c
     mvn clean package -DskipTests -Denv=cloud
 ```
 This will take a few minutes.
+
+### Terraform on Azure
+
+Enable Terraform on Azure and [Authenticate to Azure using the Azure CLI](https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html) 
 
 ### Move to Terraform folder and initialize 
 ```bash
@@ -93,6 +97,7 @@ Open `.scripts/setup-env-variables-terraform.sh` and enter the following informa
     ...
     export MYSQL_SERVER_ADMIN_PASSWORD=SuperS3cr3t # customize this
     ...
+    export TF_VAR_dev_machine_ip=123.123.123.123  # customize this
 ```
 
 Then, set the environment:
