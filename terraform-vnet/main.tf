@@ -32,6 +32,7 @@ variable "visits_service" {
   type    = string
   default = "visits-service"
 }
+
 variable "vets_service" {
   type    = string
   default = "vets-service"
@@ -41,9 +42,11 @@ variable "mysql_server_admin_name" {
   type    = string
   default = "sqlAdmin"
 }
+
 variable "mysql_server_admin_password" {
   type    = string
 }
+
 variable "mysql_database_name" {
   type    = string
   default = "petclinic"
