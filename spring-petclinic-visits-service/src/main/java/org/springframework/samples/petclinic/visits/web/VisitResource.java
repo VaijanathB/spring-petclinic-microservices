@@ -15,9 +15,7 @@
  */
 package org.springframework.samples.petclinic.visits.web;
 
-import java.util.List;
-import javax.validation.Valid;
-
+import com.azure.cosmos.implementation.guava25.collect.Lists;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -25,13 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.visits.model.Visit;
 import org.springframework.samples.petclinic.visits.model.VisitRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Juergen Hoeller
@@ -60,18 +57,22 @@ class VisitResource {
     }
 
     @GetMapping("owners/*/pets/{petId}/visits")
-    List<Visit> visits(@PathVariable("petId") int petId) {
-        return visitRepository.findByPetId(petId);
+    Optional<Visit> visits(@PathVariable("petId") int petId) {
+        return  visitRepository.findById(petId);
     }
 
     @GetMapping("pets/visits")
     Visits visitsMultiGet(@RequestParam("petId") List<Integer> petIds) {
-        final List<Visit> byPetIdIn = visitRepository.findByPetIdIn(petIds);
-        return new Visits(byPetIdIn);
+        Iterable<Visit> visitIterable = visitRepository.findAllById(petIds);
+        return new Visits(Lists.newArrayList(visitIterable));
     }
 
     @Value
     static class Visits {
         private final List<Visit> items;
+
+        Visits(List<Visit> items) {
+            this.items = items;
+        }
     }
 }

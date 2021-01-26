@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 package org.springframework.samples.petclinic.customers.model;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import com.azure.spring.data.cosmos.repository.CosmosRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository class for <code>Pet</code> domain objects All method names are compliant with Spring Data naming
@@ -32,18 +27,8 @@ import org.springframework.data.repository.query.Param;
  * @author Michael Isvy
  * @author Maciej Szarlinski
  */
-public interface PetRepository extends JpaRepository<Pet, Integer> {
-
-    /**
-     * Retrieve all {@link PetType}s from the data store.
-     * @return a Collection of {@link PetType}s.
-     */
-    @Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
-    List<PetType> findPetTypes();
-
-    @Query("FROM PetType ptype WHERE ptype.id = :typeId")
-    Optional<PetType> findPetTypeById(@Param("typeId") int typeId);
-
+@Repository
+public interface PetRepository extends CosmosRepository<Pet, Integer> {
 
 }
 

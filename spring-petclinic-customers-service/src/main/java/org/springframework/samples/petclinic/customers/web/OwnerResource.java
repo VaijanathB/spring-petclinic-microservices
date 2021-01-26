@@ -22,8 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.samples.petclinic.customers.model.Owner;
 import org.springframework.samples.petclinic.customers.model.OwnerRepository;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +48,8 @@ class OwnerResource {
 
     /**
      * Create Owner
+     *
+     * @return
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,6 +59,8 @@ class OwnerResource {
 
     /**
      * Read single Owner
+     *
+     * @return
      */
     @GetMapping(value = "/{ownerId}")
     public Optional<Owner> findOwner(@PathVariable("ownerId") int ownerId) {
@@ -64,8 +71,10 @@ class OwnerResource {
      * Read List of Owners
      */
     @GetMapping
-    public List<Owner> findAll() {
-        return ownerRepository.findAll();
+    public  List<Owner> findAll() {
+        List<Owner> list = new ArrayList<>();
+        ownerRepository.findAll().forEach(list::add);
+        return list;
     }
 
     /**
@@ -74,16 +83,15 @@ class OwnerResource {
     @PutMapping(value = "/{ownerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateOwner(@PathVariable("ownerId") int ownerId, @Valid @RequestBody Owner ownerRequest) {
-        final Optional<Owner> owner = ownerRepository.findById(ownerId);
-
-        final Owner ownerModel = owner.orElseThrow(() -> new ResourceNotFoundException("Owner "+ownerId+" not found"));
-        // This is done by hand for simplicity purpose. In a real life use-case we should consider using MapStruct.
-        ownerModel.setFirstName(ownerRequest.getFirstName());
-        ownerModel.setLastName(ownerRequest.getLastName());
-        ownerModel.setCity(ownerRequest.getCity());
-        ownerModel.setAddress(ownerRequest.getAddress());
-        ownerModel.setTelephone(ownerRequest.getTelephone());
-        log.info("Saving owner {}", ownerModel);
-        ownerRepository.save(ownerModel);
+        Optional<Owner> ownerOptional = ownerRepository.findById(ownerId);
+        ownerOptional.ifPresent(owner -> {
+            owner.setFirstName(ownerRequest.getFirstName());
+            owner.setLastName(ownerRequest.getLastName());
+            owner.setCity(ownerRequest.getCity());
+            owner.setAddress(ownerRequest.getAddress());
+            owner.setTelephone(ownerRequest.getTelephone());
+            log.info("Saving owner {}", owner);
+            ownerRepository.save(owner);
+        });
     }
 }

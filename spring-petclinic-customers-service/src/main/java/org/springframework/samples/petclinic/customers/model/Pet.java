@@ -15,21 +15,12 @@
  */
 package org.springframework.samples.petclinic.customers.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.azure.spring.data.cosmos.core.mapping.Container;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.core.style.ToStringCreator;
+
+import java.util.Date;
 
 /**
  * Simple business object representing a pet.
@@ -39,26 +30,19 @@ import org.springframework.core.style.ToStringCreator;
  * @author Sam Brannen
  * @author Maciej Szarlinski
  */
-@Entity
-@Table(name = "pets")
+@Container(containerName = "pets")
+@Builder(builderMethodName = "pet")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Pet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "birth_date")
-    @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private PetType type;
+    private String pettype;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
     @JsonIgnore
     private Owner owner;
 
@@ -86,12 +70,12 @@ public class Pet {
         this.birthDate = birthDate;
     }
 
-    public PetType getType() {
-        return type;
+    public String getType() {
+        return pettype;
     }
 
-    public void setType(final PetType type) {
-        this.type = type;
+    public void setType(final String type) {
+        this.pettype = type;
     }
 
     public Owner getOwner() {
@@ -108,7 +92,8 @@ public class Pet {
             .append("id", this.getId())
             .append("name", this.getName())
             .append("birthDate", this.getBirthDate())
-            .append("type", this.getType().getName())
+            .append("type", this.getType()
+            )
             .append("ownerFirstname", this.getOwner().getFirstName())
             .append("ownerLastname", this.getOwner().getLastName())
             .toString();

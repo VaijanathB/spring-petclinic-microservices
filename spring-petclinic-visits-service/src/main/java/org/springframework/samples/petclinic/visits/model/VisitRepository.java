@@ -15,10 +15,12 @@
  */
 package org.springframework.samples.petclinic.visits.model;
 
-import java.util.Collection;
-import java.util.List;
+import com.azure.spring.data.cosmos.repository.CosmosRepository;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Collection;
+
 
 /**
  * Repository class for <code>Visit</code> domain objects All method names are compliant with Spring Data naming conventions so this interface can easily be extended for Spring
@@ -30,9 +32,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Michael Isvy
  * @author Maciej Szarlinski
  */
-public interface VisitRepository extends JpaRepository<Visit, Integer> {
+@Repository
+public interface VisitRepository extends CosmosRepository<Visit, Integer> {
 
-    List<Visit> findByPetId(int petId);
+/*
+    Flux<Visit> findByPetId(int petId);
 
-    List<Visit> findByPetIdIn(Collection<Integer> petIds);
+    Flux<Visit> findByPetIdIn(Collection<Integer> petIds);
+*/
 }
